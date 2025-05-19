@@ -6,66 +6,55 @@ int main() {
     cout << "Enter number of processes: ";
     cin >> n;
 
-    int arrival[n], burst[n], remaining[n], completion[n], tat[n], wt[n];
+    int arrival[n], burst[n], remaining[n], completion[n];
 
-    // Input process details
+    // Input arrival and burst times
     for(int i = 0; i < n; i++) {
         cout << "Process " << i+1 << " (arrival burst): ";
         cin >> arrival[i] >> burst[i];
-        remaining[i] = burst[i];
+        remaining[i] = burst[i]; // Initialize remaining time
     }
 
     int time = 0, completed = 0;
 
-    // Simulation loop
+    // SRTF scheduling simulation
     while(completed < n) {
-        int shortest = -1;
-        int min_remaining = 9999;
-
-        // Find process with shortest remaining time
+        int shortest = -1, min_rem = 1e9;
+        // Find process with shortest remaining time at current time
         for(int i = 0; i < n; i++) {
-            if(arrival[i] <= time && remaining[i] > 0 && remaining[i] < min_remaining) {
-                min_remaining = remaining[i];
+            if(arrival[i] <= time && remaining[i] > 0 && remaining[i] < min_rem) {
+                min_rem = remaining[i];
                 shortest = i;
             }
         }
-
-        if(shortest == -1) {
+        if(shortest == -1) { // No process is ready, advance time
             time++;
             continue;
         }
-
-        // Execute process for 1 time unit
-        remaining[shortest]--;
+        remaining[shortest]--; // Execute for 1 time unit
         time++;
-
-        // Process completed
-        if(remaining[shortest] == 0) {
+        if(remaining[shortest] == 0) { // If process finished
             completion[shortest] = time;
             completed++;
         }
     }
 
-    // Calculate metrics
+    // Calculate waiting and turnaround times
     float total_wt = 0, total_tat = 0;
-    for(int i = 0; i < n; i++) {
-        tat[i] = completion[i] - arrival[i];
-        wt[i] = tat[i] - burst[i];
-        total_wt += wt[i];
-        total_tat += tat[i];
-    }
-
-    // Display results
     cout << "\nPID\tArrival\tBurst\tTAT\tWT\n";
     for(int i = 0; i < n; i++) {
-        cout << i+1 << "\t" << arrival[i] << "\t" << burst[i] 
-             << "\t" << tat[i] << "\t" << wt[i] << endl;
+        int tat = completion[i] - arrival[i]; // Turnaround time
+        int wt = tat - burst[i];              // Waiting time
+        total_tat += tat;
+        total_wt += wt;
+        cout << i+1 << "\t" << arrival[i] << "\t" << burst[i]
+             << "\t" << tat << "\t" << wt << endl;
     }
 
-    cout << fixed;
+    // Output averages
     cout.precision(2);
-    cout << "\nAverage Waiting Time: " << total_wt/n << endl;
-    cout << "Average Turnaround Time: " << total_tat/n << endl;
+    cout << "\nAverage Waiting Time: " << fixed << total_wt/n << endl;
+    cout << "Average Turnaround Time: " << fixed << total_tat/n << endl;
 
     return 0;
 }
