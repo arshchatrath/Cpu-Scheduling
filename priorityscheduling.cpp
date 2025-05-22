@@ -1,6 +1,6 @@
 #include<iostream>
 using namespace std;
-// Function to find the waiting time for each process
+
 int main(){
     int n, i, j, total = 0;
     cout << "Enter the number of processes: ";

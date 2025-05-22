@@ -2,7 +2,7 @@
 using namespace std;
 
 int main() {
-    int n, i, j, total = 0;
+    int n, i, total = 0;
     cout << "Enter the number of processes: ";
     cin >> n;
     int bt[n], wt[n], tat[n];
@@ -26,13 +26,12 @@ int main() {
     
     // Calculate average turnaround time
     float avgTat = (float)total / n;
-    
+
     cout << "\nProcess\tBurst Time\tWaiting Time\tTurnaround Time\n";
     for (i = 0; i < n; i++) {
         cout << "P" << i + 1 << "\t" << bt[i] << "\t\t" << wt[i] << "\t\t" << tat[i] << endl;
     }
     
     cout << "\nAverage Turnaround Time: " << avgTat << endl;
-    
     return 0;
 }

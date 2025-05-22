@@ -19,22 +19,22 @@ int main() {
 
     // SRTF scheduling simulation
     while(completed < n) {
-        int shortest = -1, min_rem = 1e9;
+        int shortest_process = -1, min_rem = 1e9;
         // Find process with shortest remaining time at current time
         for(int i = 0; i < n; i++) {
             if(arrival[i] <= time && remaining[i] > 0 && remaining[i] < min_rem) {
                 min_rem = remaining[i];
-                shortest = i;
+                shortest_process = i;
             }
         }
-        if(shortest == -1) { // No process is ready, advance time
+        if(shortest_process == -1) { // No process is ready, advance time
             time++;
             continue;
         }
-        remaining[shortest]--; // Execute for 1 time unit
+        remaining[shortest_process]--; // Execute for 1 time unit
         time++;
-        if(remaining[shortest] == 0) { // If process finished
-            completion[shortest] = time;
+        if(remaining[shortest_process] == 0) { // If process finished
+            completion[shortest_process] = time;
             completed++;
         }
     }
@@ -50,11 +50,9 @@ int main() {
         cout << i+1 << "\t" << arrival[i] << "\t" << burst[i]
              << "\t" << tat << "\t" << wt << endl;
     }
-
+    
     // Output averages
-    cout.precision(2);
-    cout << "\nAverage Waiting Time: " << fixed << total_wt/n << endl;
-    cout << "Average Turnaround Time: " << fixed << total_tat/n << endl;
-
+    cout << "\nAverage Waiting Time: " <<  total_wt/n << endl;
+    cout << "Average Turnaround Time: " << total_tat/n << endl;
     return 0;
 }
